@@ -9,6 +9,7 @@
   "author": "Benjamin Niess",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "readline": "^1.3.0"
   }
 }

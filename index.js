@@ -1,4 +1,7 @@
 const readline = require('readline')
+const Promise = require('bluebird')
+const bot = require('./bots/bot-1')
+const helpers = require('./helpers')
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -68,55 +71,118 @@ const options = {
   },
 }
 
+let history = []
+let roundHistory
+let stashedDices = []
+let roundNumber = 1
+let throwNumber = 1
+
 console.log('Yam bot at your service!')
 
-startListening()
-  .then((values) => {
-    console.log(values)
-    return startListening()
-  })
-  .catch(() => {
-    console.log('Please enter 5 space separated numbers')
-    return startListening()
-  })
+startRound()
 
-function startListening() {
-  return new Promise((resolve, reject) => {
-    rl.question('Please tell me what you got? ', (answer) => {
-      formatDicesValues(answer)
-        .then((values) => {
-          resolve(values)
-        })
-        .catch(() => {
-          reject()
-        })
-    })
+function startRound() {
+  if (roundNumber >= 12) {
+    console.log('GAME OVER')
+    return
+  }
+
+  throwNumber = 1
+  roundHistory = {
+    throws: {
+      1: {
+        results: {},
+      },
+      2: {
+        results: {},
+      },
+      3: {
+        results: {},
+      },
+    },
+    score: 0,
+    choice: null,
+  }
+
+  startThrow(5).then((value) => {
+    if (value instanceof Array) {
+      throwNumber = 2
+      startThrow(value.length).then((value) => {
+        if (value instanceof Array) {
+          throwNumber = 3
+          startThrow(value.length).then((value) => {
+            saveChoice(value)
+            startRound()
+          })
+        } else {
+          saveChoice(value)
+          startRound()
+        }
+      })
+    } else {
+      saveChoice(value)
+      startRound()
+    }
   })
 }
 
-/**
- * Checks if the stdin dice values is correct (5 numbers from 1 to 6 separated with spaces)
- *
- * @param {*} values
- */
-function formatDicesValues(values) {
+function startThrow(diceCount) {
   return new Promise((resolve, reject) => {
-    let numbers = values.split(' ')
-    if (numbers.length !== 5) {
-      reject()
-    }
+    console.log('Round ' + roundNumber + ' - throw ' + throwNumber + '/3')
+    waitForThrow(diceCount)
+      .then((values) => {
+        console.log(roundHistory)
+        roundHistory['throws'][throwNumber]['results'] = values
+        bot
+          .Whatsnext(values, throwNumber, stashedDices, history)
+          .then((result) => {
+            helpers
+              .verifyWhatsNext(
+                result,
+                values,
+                throwNumber,
+                stashedDices,
+                history,
+              )
+              .then(() => {
+                resolve(result)
+              })
+              .catch(() => {
+                reject('Wrong answer')
+              })
+          })
+      })
+      .catch((errorMessage) => {
+        console.log()
+        console.error(errorMessage)
+        console.log()
+        startThrow(diceCount)
+      })
+  })
+}
 
-    let isOk = true
-    numbers.map((x) => {
-      if (x < 1 || x > 6) {
-        isOk = false
-      }
-    })
+function saveChoice(choice) {
+  console.log(choice)
 
-    if (!isOk) {
-      reject()
-    }
-
-    resolve(numbers)
+  history[roundNumber] = roundHistory
+  roundHistory = {}
+  console.log(history)
+  return true
+}
+function waitForThrow(diceCount = 5) {
+  return new Promise((resolve, reject) => {
+    rl.question(
+      'Please enter ' + diceCount + ' space separated numbers ',
+      (answer) => {
+        helpers
+          .formatDicesValues(answer, diceCount)
+          .then((values) => {
+            resolve(values)
+          })
+          .catch(() => {
+            reject('Wrong format. Please try again')
+          })
+      },
+    )
   })
 }
