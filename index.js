@@ -8,7 +8,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 })
 
-const options = {
+let options = {
   aces: {
     played: false,
     label: 'Aces',
@@ -165,8 +165,10 @@ function saveChoice(choice) {
   console.log(choice)
 
   history[roundNumber] = roundHistory
+  options[choice].played = true
   roundHistory = {}
   console.log(history)
+  console.log(options)
   return true
 }
 function waitForThrow(diceCount = 5) {
