@@ -7,7 +7,7 @@ function formatDicesValues(values, diceCount = 5) {
   return new Promise((resolve, reject) => {
     let numbers = values.split(' ')
     if (numbers.length !== diceCount) {
-      reject()
+      reject('wrong-length')
     }
 
     let isOk = true
@@ -18,7 +18,7 @@ function formatDicesValues(values, diceCount = 5) {
     })
 
     if (!isOk) {
-      reject()
+      reject('wrong-format')
     }
 
     resolve(numbers)
