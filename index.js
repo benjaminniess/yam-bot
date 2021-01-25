@@ -2,76 +2,14 @@ const readline = require('readline')
 const Promise = require('bluebird')
 const bot = require('./bots/bot-1')
 const helpers = require('./helpers')
+const history = require('./history')
+const score = require('./score')
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 })
 
-let options = {
-  aces: {
-    played: false,
-    label: 'Aces',
-    score: 0,
-  },
-  twos: {
-    played: false,
-    label: 'Twos',
-    score: 0,
-  },
-  threes: {
-    played: false,
-    label: 'Threes',
-    score: 0,
-  },
-  fours: {
-    played: false,
-    label: 'Fours',
-    score: 0,
-  },
-  fives: {
-    played: false,
-    label: 'Fives',
-    score: 0,
-  },
-  sixes: {
-    played: false,
-    label: 'Sixes',
-    score: 0,
-  },
-  '3-same': {
-    played: false,
-    label: '3 of a kind',
-    score: 0,
-  },
-  '4-same': {
-    played: false,
-    label: '4 of a kind',
-    score: 0,
-  },
-  full: {
-    played: false,
-    label: 'Full house',
-    score: 0,
-  },
-  'sm-straight': {
-    played: false,
-    label: 'Small straight (1,2,3,4,5)',
-    score: 0,
-  },
-  'lg-straight': {
-    played: false,
-    label: 'LArge straight (2,3,4,5,6)',
-    score: 0,
-  },
-  yahtzee: {
-    played: false,
-    label: 'YAHTZEE',
-    score: 0,
-  },
-}
-
-let history = []
 let roundHistory
 let stashedDices = []
 let roundNumber = 1
@@ -131,7 +69,6 @@ function startThrow(diceCount) {
     console.log('Round ' + roundNumber + ' - throw ' + throwNumber + '/3')
     waitForThrow(diceCount)
       .then((values) => {
-        console.log(roundHistory)
         roundHistory['throws'][throwNumber]['results'] = values
         bot
           .Whatsnext(values, throwNumber, stashedDices, history)
@@ -162,13 +99,20 @@ function startThrow(diceCount) {
 }
 
 function saveChoice(choice) {
-  console.log(choice)
+  let values = [1, 2, 2, 3, 4]
+  let roundScore = score.calculateScore(choice, values)
 
-  history[roundNumber] = roundHistory
-  options[choice].played = true
+  roundHistory.choice = choice
+  roundHistory.score = roundScore
+  history.addRound(roundHistory)
+
+  score.setPlayed(choice)
+  score.setScore(choice, roundScore)
+
   roundHistory = {}
-  console.log(history)
-  console.log(options)
+
+  console.log(history.getHistory())
+
   return true
 }
 function waitForThrow(diceCount = 5) {
