@@ -1,15 +1,9 @@
-const readline = require('readline')
 const Promise = require('bluebird')
 const bot = require('./bots/bot-1')
 const helpers = require('./helpers')
 const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-})
 
 console.log('Yam bot at your service!')
 
@@ -55,7 +49,8 @@ function startThrow(diceCount) {
         throwManager.getCurrentThrowNumber() +
         '/3',
     )
-    waitForThrow(diceCount)
+    throwManager
+      .waitForThrow(diceCount)
       .then((values) => {
         throwManager.saveThrowResults(values)
         history.setThrowResults(throwManager.getCurrentThrowNumber(), values)
@@ -102,21 +97,4 @@ function saveChoice(choice) {
   console.log(history.getHistory())
 
   return true
-}
-function waitForThrow(diceCount = 5) {
-  return new Promise((resolve, reject) => {
-    rl.question(
-      'Please enter ' + diceCount + ' space separated numbers ',
-      (answer) => {
-        helpers
-          .formatDicesValues(answer, diceCount)
-          .then((values) => {
-            resolve(values)
-          })
-          .catch(() => {
-            reject('Wrong format. Please try again')
-          })
-      },
-    )
-  })
 }
