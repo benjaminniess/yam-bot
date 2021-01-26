@@ -1,5 +1,5 @@
 class YamResolver {
-  Whatsnext(diceValues, throwCount, stashed, history) {
+  Whatsnext(diceValues, throwCount, history) {
     return new Promise((resolve, reject) => {
       if (throwCount == 3) {
         resolve('aces')

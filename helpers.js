@@ -25,7 +25,7 @@ function formatDicesValues(values, diceCount = 5) {
   })
 }
 
-function verifyWhatsNext(result, values, throwNumber, stashed, history) {
+function verifyWhatsNext(result, values, throwNumber, history) {
   return new Promise((resolve, reject) => {
     // TODO: analyse
     resolve()

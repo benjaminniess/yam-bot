@@ -4,50 +4,32 @@ const bot = require('./bots/bot-1')
 const helpers = require('./helpers')
 const history = require('./history')
 const score = require('./score')
+const throwManager = require('./throwManager')
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 })
 
-let roundHistory
-let stashedDices = []
-let roundNumber = 1
-let throwNumber = 1
-
 console.log('Yam bot at your service!')
 
 startRound()
 
 function startRound() {
-  if (roundNumber >= 12) {
+  if (history.getCurrentRound() >= 12) {
     console.log('GAME OVER')
     return
   }
 
-  throwNumber = 1
-  roundHistory = {
-    throws: {
-      1: {
-        results: {},
-      },
-      2: {
-        results: {},
-      },
-      3: {
-        results: {},
-      },
-    },
-    score: 0,
-    choice: null,
-  }
+  throwManager.reset()
+  history.newRound()
 
   startThrow(5).then((value) => {
     if (value instanceof Array) {
-      throwNumber = 2
+      throwManager.inscreaseThrowCount()
       startThrow(value.length).then((value) => {
         if (value instanceof Array) {
-          throwNumber = 3
+          throwManager.inscreaseThrowCount()
           startThrow(value.length).then((value) => {
             saveChoice(value)
             startRound()
@@ -66,20 +48,30 @@ function startRound() {
 
 function startThrow(diceCount) {
   return new Promise((resolve, reject) => {
-    console.log('Round ' + roundNumber + ' - throw ' + throwNumber + '/3')
+    console.log(
+      'Round ' +
+        history.getCurrentRound() +
+        ' - throw ' +
+        throwManager.getCurrentThrowNumber() +
+        '/3',
+    )
     waitForThrow(diceCount)
       .then((values) => {
-        roundHistory['throws'][throwNumber]['results'] = values
+        throwManager.saveThrowResults(values)
+        history.setThrowResults(throwManager.getCurrentThrowNumber(), values)
         bot
-          .Whatsnext(values, throwNumber, stashedDices, history)
+          .Whatsnext(
+            throwManager.getAllDices(),
+            throwManager.getCurrentThrowNumber(),
+            history.getHistory(),
+          )
           .then((result) => {
             helpers
               .verifyWhatsNext(
                 result,
-                values,
-                throwNumber,
-                stashedDices,
-                history,
+                throwManager.getAllDices(),
+                throwManager.getCurrentThrowNumber(),
+                history.getHistory(),
               )
               .then(() => {
                 resolve(result)
@@ -102,14 +94,10 @@ function saveChoice(choice) {
   let values = [1, 2, 2, 3, 4]
   let roundScore = score.calculateScore(choice, values)
 
-  roundHistory.choice = choice
-  roundHistory.score = roundScore
-  history.addRound(roundHistory)
+  history.closeRound(choice, score)
 
   score.setPlayed(choice)
   score.setScore(choice, roundScore)
-
-  roundHistory = {}
 
   console.log(history.getHistory())
 
