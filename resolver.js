@@ -1,8 +1,10 @@
 class YamResolver {
-  Whatsnext(diceValues, throwCount, history) {
+  Whatsnext(diceValues, throwCount, availableOptions) {
     return new Promise((resolve, reject) => {
       if (throwCount == 3) {
-        resolve('aces')
+        availableOptions.map((option) => {
+          resolve(option)
+        })
       } else {
         resolve([1, 1, 3])
       }

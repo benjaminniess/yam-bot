@@ -1,4 +1,4 @@
-function verifyWhatsNext(result, values, throwNumber, history) {
+function verifyWhatsNext(result, values, throwNumber, availableOptions) {
   return new Promise((resolve, reject) => {
     // TODO: analyse
     resolve()

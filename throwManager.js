@@ -13,10 +13,19 @@ class ThrowManager {
     this.throwNumber = 1
     this.result = []
     this.stashedDices = []
+    this.throableDices = 5
   }
 
   canThrow() {
     return this.throwCount < 4
+  }
+
+  countThroableDices() {
+    return this.throableDices
+  }
+
+  setThroableDices(diceCount) {
+    this.throableDices = diceCount
   }
 
   inscreaseThrowCount() {
@@ -25,6 +34,11 @@ class ThrowManager {
 
   saveThrowResults(result) {
     this.result = result.concat(this.stashedDices)
+  }
+
+  saveStashedDices(dices) {
+    this.setThroableDices(5 - dices.length)
+    this.stashedDices = dices
   }
 
   getStashedDices() {
@@ -39,12 +53,14 @@ class ThrowManager {
     return this.result
   }
 
-  waitForThrow(diceCount = 5) {
+  waitForThrow() {
     return new Promise((resolve, reject) => {
       this.rl.question(
-        'Please enter ' + diceCount + ' space separated numbers ',
+        'Please enter ' +
+          this.countThroableDices() +
+          ' space separated numbers ',
         (answer) => {
-          this.formatDicesValues(answer, diceCount)
+          this.formatDicesValues(answer)
             .then((values) => {
               resolve(values)
             })
@@ -56,10 +72,10 @@ class ThrowManager {
     })
   }
 
-  formatDicesValues(values, diceCount = 5) {
+  formatDicesValues(values) {
     return new Promise((resolve, reject) => {
       let numbers = values.split(' ')
-      if (numbers.length !== diceCount) {
+      if (numbers.length !== this.countThroableDices()) {
         reject('wrong-length')
       }
 

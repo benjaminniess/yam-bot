@@ -92,6 +92,17 @@ class Score {
     return 10
   }
 
+  getAvailableOptions() {
+    let availableOptions = []
+    for (const [key, option] of Object.entries(this.options)) {
+      if (option.played == false) {
+        availableOptions.push(key)
+      }
+    }
+
+    return availableOptions
+  }
+
   getTotal() {
     let total = 0
     for (const [key, option] of Object.entries(object1)) {

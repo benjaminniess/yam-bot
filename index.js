@@ -16,15 +16,18 @@ function startRound() {
   }
 
   throwManager.reset()
+  history.increaseRoundNumber()
   history.newRound()
 
-  startThrow(5).then((value) => {
+  startThrow().then((value) => {
     if (value instanceof Array) {
       throwManager.inscreaseThrowCount()
-      startThrow(value.length).then((value) => {
+      throwManager.saveStashedDices(value)
+      startThrow().then((value) => {
         if (value instanceof Array) {
           throwManager.inscreaseThrowCount()
-          startThrow(value.length).then((value) => {
+          throwManager.saveStashedDices(value)
+          startThrow().then((value) => {
             saveChoice(value)
             startRound()
           })
@@ -40,7 +43,7 @@ function startRound() {
   })
 }
 
-function startThrow(diceCount) {
+function startThrow() {
   return new Promise((resolve, reject) => {
     console.log(
       'Round ' +
@@ -50,7 +53,7 @@ function startThrow(diceCount) {
         '/3',
     )
     throwManager
-      .waitForThrow(diceCount)
+      .waitForThrow()
       .then((values) => {
         throwManager.saveThrowResults(values)
         history.setThrowResults(throwManager.getCurrentThrowNumber(), values)
@@ -58,7 +61,7 @@ function startThrow(diceCount) {
           .Whatsnext(
             throwManager.getAllDices(),
             throwManager.getCurrentThrowNumber(),
-            history.getHistory(),
+            score.getAvailableOptions(),
           )
           .then((result) => {
             helpers
@@ -66,7 +69,7 @@ function startThrow(diceCount) {
                 result,
                 throwManager.getAllDices(),
                 throwManager.getCurrentThrowNumber(),
-                history.getHistory(),
+                score.getAvailableOptions(),
               )
               .then(() => {
                 resolve(result)
@@ -80,7 +83,7 @@ function startThrow(diceCount) {
         console.log()
         console.error(errorMessage)
         console.log()
-        startThrow(diceCount)
+        startThrow()
       })
   })
 }

@@ -1,7 +1,9 @@
+const { throableDices } = require('./throwManager')
+
 class History {
   constructor() {
     this.history = []
-    this.roundNumber = 1
+    this.roundNumber = 0
   }
 
   newRound() {
@@ -30,6 +32,10 @@ class History {
     this.roundHistory.score = score
     this.roundHistory.choice = choice
     this.history.push(this.roundHistory)
+  }
+
+  increaseRoundNumber() {
+    this.roundNumber++
   }
 
   getCurrentRound() {
