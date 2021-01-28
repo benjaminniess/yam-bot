@@ -91,7 +91,6 @@ function startThrow() {
 
 function saveChoice(choice) {
   let roundScore = score.calculateScore(choice, throwManager.getAllDices())
-  console.log(roundScore, throwManager.getAllDices())
   history.closeRound(choice, score)
 
   score.setPlayed(choice)
