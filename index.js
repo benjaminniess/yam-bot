@@ -12,6 +12,7 @@ startRound()
 function startRound() {
   if (history.getCurrentRound() >= 12) {
     console.log('GAME OVER')
+    console.log('Your score is ' + score.getTotal())
     return
   }
 
@@ -89,9 +90,8 @@ function startThrow() {
 }
 
 function saveChoice(choice) {
-  let values = [1, 2, 2, 3, 4]
-  let roundScore = score.calculateScore(choice, values)
-
+  let roundScore = score.calculateScore(choice, throwManager.getAllDices())
+  console.log(roundScore, throwManager.getAllDices())
   history.closeRound(choice, score)
 
   score.setPlayed(choice)

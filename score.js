@@ -89,7 +89,33 @@ class Score {
   }
 
   calculateScore(option, values) {
-    return 10
+    switch (option) {
+      case 'aces':
+        return this._calcul_classic_score(1, values)
+      case 'twos':
+        return this._calcul_classic_score(2, values)
+      case 'threes':
+        return this._calcul_classic_score(3, values)
+      case 'fours':
+        return this._calcul_classic_score(4, values)
+      case 'fives':
+        return this._calcul_classic_score(5, values)
+      case 'sixes':
+        return this._calcul_classic_score(6, values)
+      default:
+        return 0
+    }
+  }
+
+  _calcul_classic_score(optionInteger, values) {
+    let score = 0
+    values.map((value) => {
+      if (value == optionInteger) {
+        score += optionInteger
+      }
+    })
+
+    return score
   }
 
   getAvailableOptions() {
