@@ -17,7 +17,7 @@ class ThrowManager {
   }
 
   canThrow() {
-    return this.throwCount < 4
+    return this.throwNumber < 4
   }
 
   countThroableDices() {
