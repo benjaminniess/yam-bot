@@ -24,40 +24,27 @@ describe('Throw manager tests', function () {
   })
   describe('formatDicesValues', function () {
     it('should convert a space separated list of dice value into an array of dice values', function () {
-      return throwManager.formatDicesValues('1 2 3 4 5').then((value) => {
-        assert.deepEqual(value, ['1', '2', '3', '4', '5'])
-      })
+      assert.deepEqual(throwManager.formatDicesValues('1 2 3 4 5'), [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ])
     })
-    it('should convert a space separated list of dice value into an array of dice values', function () {
-      return throwManager.formatDicesValues('1 2 3 4 5', 5).then((value) => {
-        assert.deepEqual(value, ['1', '2', '3', '4', '5'])
-      })
-    })
-    it('should convert a space separated list of dice value into an array of dice values', function () {
+    it('should throw an error a space separated list of dice value into an array of dice values', function () {
       throwManager.setThroableDices(3)
-      return throwManager.formatDicesValues('1 1 3').then((value) => {
-        assert.deepEqual(value, ['1', '1', '3'])
-      })
+      assert.deepEqual(throwManager.formatDicesValues('1 2 3'), [1, 2, 3])
+    })
+    it('should refuse to convert a space separated list of wrong dice value', function () {
+      assert.throws(() => {
+        throwManager.formatDicesValues('1 2 10')
+      }, Error)
     })
     it('should not refuse to convert a space separated list of wrong dice value', function () {
-      return throwManager
-        .formatDicesValues('1 1 10')
-        .then((value) => {
-          assert.equal(true, false)
-        })
-        .catch((errorM) => {
-          assert.equal(errorM, 'wrong-format')
-        })
-    })
-    it('should not refuse to convert a space separated list of wrong dice value', function () {
-      return throwManager
-        .formatDicesValues('1 1 1 1')
-        .then((value) => {
-          assert.equal(true, false)
-        })
-        .catch((errorM) => {
-          assert.equal(errorM, 'wrong-length')
-        })
+      assert.throws(() => {
+        throwManager.formatDicesValues('1 2 1 1')
+      }, Error)
     })
   })
 })

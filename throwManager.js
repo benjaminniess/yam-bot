@@ -60,38 +60,34 @@ class ThrowManager {
           this.countThroableDices() +
           ' space separated numbers ',
         (answer) => {
-          this.formatDicesValues(answer)
-            .then((values) => {
-              resolve(values)
-            })
-            .catch(() => {
-              reject('Wrong format. Please try again')
-            })
+          try {
+            return this.formatDicesValues(answer)
+          } catch (error) {
+            reject('Wrong format. Please try again')
+          }
         },
       )
     })
   }
 
   formatDicesValues(values) {
-    return new Promise((resolve, reject) => {
-      let numbers = values.split(' ')
-      if (numbers.length !== this.countThroableDices()) {
-        reject('wrong-length')
+    let numbers = values.split(' ')
+    if (numbers.length !== this.countThroableDices()) {
+      throw new Error('wrong-length')
+    }
+
+    let isOk = true
+    numbers.map((x) => {
+      if (x < 1 || x > 6) {
+        isOk = false
       }
-
-      let isOk = true
-      numbers.map((x) => {
-        if (x < 1 || x > 6) {
-          isOk = false
-        }
-      })
-
-      if (!isOk) {
-        reject('wrong-format')
-      }
-
-      resolve(numbers)
     })
+
+    if (!isOk) {
+      throw new Error('wrong-format')
+    }
+
+    return numbers.map((x) => +x)
   }
 }
 module.exports = new ThrowManager()
