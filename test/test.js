@@ -1,6 +1,7 @@
 const assert = require('chai').assert
 const helpers = require('../helpers')
 const throwManager = require('../throwManager')
+const score = require('../score')
 
 describe('Throw manager tests', function () {
   describe('Get/Set', function () {
@@ -45,6 +46,55 @@ describe('Throw manager tests', function () {
       assert.throws(() => {
         throwManager.formatDicesValues('1 2 1 1')
       }, Error)
+    })
+  })
+})
+
+describe('Score tests', function () {
+  describe('Calculate score', function () {
+    it('Should calculate score from dice results', function () {
+      assert.equal(score.calculateScore('aces', [1, 1, 1, 2, 5]), 3)
+      assert.equal(score.calculateScore('aces', [6, 1, 3, 1, 5]), 2)
+      assert.equal(score.calculateScore('aces', [2, 6, 3, 4, 5]), 0)
+      assert.equal(score.calculateScore('twos', [2, 2, 1, 2, 2]), 8)
+      assert.equal(score.calculateScore('twos', [6, 1, 3, 1, 2]), 2)
+      assert.equal(score.calculateScore('twos', [2, 2, 2, 2, 2]), 10)
+      assert.equal(score.calculateScore('threes', [2, 2, 3, 2, 2]), 3)
+      assert.equal(score.calculateScore('fours', [2, 2, 2, 2, 2]), 0)
+      assert.equal(score.calculateScore('fives', [2, 5, 5, 5, 2]), 15)
+      assert.equal(score.calculateScore('sixes', [2, 6, 2, 2, 2]), 6)
+    })
+  })
+
+  describe('Get / Set scores', function () {
+    it('should get score from empty options', function () {
+      assert.equal(score.getScore('aces'), 0)
+    })
+    it('should set score for aces', function () {
+      score.setScore('aces', 3)
+      assert.equal(score.getScore('aces'), 3)
+    })
+  })
+
+  describe('Is played?', function () {
+    it('should check if option is played', function () {
+      assert.equal(score.isPlayed('aces'), true)
+      assert.equal(score.isPlayed('twos'), false)
+    })
+  })
+
+  describe('Get labels', function () {
+    it('Retrieve options labels', function () {
+      assert.equal(score.getLabel('aces'), 'Aces')
+      assert.equal(score.getLabel('lg-straight'), 'Large straight (2,3,4,5,6)')
+    })
+  })
+
+  describe('Get total score', function () {
+    it('should retrive total score', function () {
+      assert.equal(score.getTotal(), 3)
+      score.setScore('sixes', 12)
+      assert.equal(score.getTotal(), 15)
     })
   })
 })

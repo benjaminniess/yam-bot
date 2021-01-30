@@ -53,7 +53,7 @@ class Score {
       },
       'lg-straight': {
         played: false,
-        label: 'LArge straight (2,3,4,5,6)',
+        label: 'Large straight (2,3,4,5,6)',
         score: 0,
       },
       yahtzee: {
@@ -82,9 +82,10 @@ class Score {
 
   setScore(option, score) {
     this.options[option].score = score
+    this._setPlayed(option)
   }
 
-  setPlayed(option) {
+  _setPlayed(option) {
     this.options[option].played = true
   }
 
@@ -131,8 +132,8 @@ class Score {
 
   getTotal() {
     let total = 0
-    for (const [key, option] of Object.entries(object1)) {
-      total += option
+    for (const [key, option] of Object.entries(this.options)) {
+      total += option.score
     }
 
     return total
