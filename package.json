@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+    "test": "mocha --exit"
   },
   "pre-commit": [
     "test"
