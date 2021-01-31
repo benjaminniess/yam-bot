@@ -17,7 +17,6 @@ function startRound() {
   }
 
   throwManager.reset()
-  history.increaseRoundNumber()
   history.newRound()
 
   startThrow().then((value) => {

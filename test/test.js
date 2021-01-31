@@ -2,6 +2,7 @@ const assert = require('chai').assert
 const helpers = require('../helpers')
 const throwManager = require('../throwManager')
 const score = require('../score')
+const history = require('../history')
 
 describe('Throw manager tests', function () {
   describe('Get/Set', function () {
@@ -95,6 +96,30 @@ describe('Score tests', function () {
       assert.equal(score.getTotal(), 3)
       score.setScore('sixes', 12)
       assert.equal(score.getTotal(), 15)
+    })
+  })
+})
+
+describe('History tests', function () {
+  describe('Rouds count', function () {
+    it('Should calculate score from dice results', function () {
+      assert.equal(history.getCurrentRound(), 0)
+      history.newRound()
+      assert.equal(history.getCurrentRound(), 1)
+    })
+  })
+
+  describe('Results log', function () {
+    it('Should log throw results', function () {
+      history.setThrowResults(1, [1, 1, 5, 6, 2])
+      history.setThrowResults(2, [1, 1, 1, 5, 4])
+      history.setThrowResults(3, [1, 1, 1, 5, 5])
+
+      assert.deepEqual(history.getHistory(), [])
+
+      history.closeRound('full', 30)
+      assert.equal(history.getHistory().length, 1)
+      assert.equal(history.getHistory()[0].score, 30)
     })
   })
 })

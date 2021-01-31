@@ -22,6 +22,8 @@ class History {
       score: 0,
       choice: null,
     }
+
+    this._increaseRoundNumber()
   }
 
   setThrowResults(throwNumber, result) {
@@ -34,7 +36,7 @@ class History {
     this.history.push(this.roundHistory)
   }
 
-  increaseRoundNumber() {
+  _increaseRoundNumber() {
     this.roundNumber++
   }
 
