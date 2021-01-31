@@ -1,5 +1,4 @@
 const assert = require('chai').assert
-const helpers = require('../helpers')
 const throwManager = require('../throwManager')
 const score = require('../score')
 const history = require('../history')

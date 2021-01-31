@@ -79,7 +79,7 @@ async function startThrow() {
   }
 
   try {
-    securityVerification = await helpers.verifyWhatsNext(
+    securityVerification = await throwManager.verifyWhatsNext(
       botDecision,
       throwManager.getAllDices(),
       throwManager.getCurrentThrowNumber(),

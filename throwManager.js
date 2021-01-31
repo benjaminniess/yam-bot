@@ -53,6 +53,10 @@ class ThrowManager {
     return this.result
   }
 
+  async verifyWhatsNext(result, values, throwNumber, availableOptions) {
+    return true
+  }
+
   waitForThrow() {
     return new Promise((resolve, reject) => {
       this.rl.question(
