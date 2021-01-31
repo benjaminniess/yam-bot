@@ -19,73 +19,78 @@ function startRound() {
   throwManager.reset()
   history.newRound()
 
-  startThrow().then((value) => {
-    if (value instanceof Array) {
-      throwManager.inscreaseThrowCount()
-      throwManager.saveStashedDices(value)
-      startThrow().then((value) => {
-        if (value instanceof Array) {
-          throwManager.inscreaseThrowCount()
-          throwManager.saveStashedDices(value)
-          startThrow().then((value) => {
+  startThrow()
+    .then((value) => {
+      if (value instanceof Array) {
+        throwManager.inscreaseThrowCount()
+        throwManager.saveStashedDices(value)
+        startThrow().then((value) => {
+          if (value instanceof Array) {
+            throwManager.inscreaseThrowCount()
+            throwManager.saveStashedDices(value)
+            startThrow().then((value) => {
+              saveChoice(value)
+              startRound()
+            })
+          } else {
             saveChoice(value)
             startRound()
-          })
-        } else {
-          saveChoice(value)
-          startRound()
-        }
-      })
-    } else {
-      saveChoice(value)
-      startRound()
-    }
-  })
+          }
+        })
+      } else {
+        saveChoice(value)
+        startRound()
+      }
+    })
+    .catch((e) => {
+      console.log(e)
+    })
 }
 
-function startThrow() {
-  return new Promise((resolve, reject) => {
-    console.log(
-      'Round ' +
-        history.getCurrentRound() +
-        ' - throw ' +
-        throwManager.getCurrentThrowNumber() +
-        '/3',
+async function startThrow() {
+  console.log(
+    'Round ' +
+      history.getCurrentRound() +
+      ' - throw ' +
+      throwManager.getCurrentThrowNumber() +
+      '/3',
+  )
+
+  let throwResults, botDecision, securityVerification
+  try {
+    throwResults = await throwManager.waitForThrow()
+  } catch (e) {
+    console.error(e)
+    return startThrow()
+  }
+
+  throwManager.saveThrowResults(throwResults)
+  history.setThrowResults(throwManager.getCurrentThrowNumber(), throwResults)
+
+  try {
+    botDecision = await bot.Whatsnext(
+      throwManager.getAllDices(),
+      throwManager.getCurrentThrowNumber(),
+      score.getAvailableOptions(),
     )
-    throwManager
-      .waitForThrow()
-      .then((values) => {
-        throwManager.saveThrowResults(values)
-        history.setThrowResults(throwManager.getCurrentThrowNumber(), values)
-        bot
-          .Whatsnext(
-            throwManager.getAllDices(),
-            throwManager.getCurrentThrowNumber(),
-            score.getAvailableOptions(),
-          )
-          .then((result) => {
-            helpers
-              .verifyWhatsNext(
-                result,
-                throwManager.getAllDices(),
-                throwManager.getCurrentThrowNumber(),
-                score.getAvailableOptions(),
-              )
-              .then(() => {
-                resolve(result)
-              })
-              .catch(() => {
-                reject('Wrong answer')
-              })
-          })
-      })
-      .catch((errorMessage) => {
-        console.log()
-        console.error(errorMessage)
-        console.log()
-        startThrow()
-      })
-  })
+  } catch (e) {
+    console.error(e)
+    return startThrow()
+  }
+
+  try {
+    securityVerification = await helpers.verifyWhatsNext(
+      botDecision,
+      throwManager.getAllDices(),
+      throwManager.getCurrentThrowNumber(),
+      score.getAvailableOptions(),
+    )
+  } catch (e) {
+    console.error(e)
+    return startThrow()
+  }
+
+  return botDecision
 }
 
 function saveChoice(choice) {

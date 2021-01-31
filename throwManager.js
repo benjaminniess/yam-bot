@@ -61,7 +61,7 @@ class ThrowManager {
           ' space separated numbers ',
         (answer) => {
           try {
-            return this.formatDicesValues(answer)
+            resolve(this.formatDicesValues(answer))
           } catch (error) {
             reject('Wrong format. Please try again')
           }
