@@ -2,6 +2,7 @@ const assert = require('chai').assert
 const throwManager = require('../throwManager')
 const score = require('../score')
 const history = require('../history')
+const helpers = require('../helpers')
 
 describe('Throw manager tests', function () {
   describe('Get/Set', function () {
@@ -73,6 +74,36 @@ describe('Score tests', function () {
     it('should set score for aces', function () {
       score.setScore('aces', 3)
       assert.equal(score.getScore('aces'), 3)
+    })
+  })
+
+  describe('Scores helpers', function () {
+    it('should should count occurences', function () {
+      assert.equal(helpers.countIdenticalFaces([1, 3, 1, 1, 6]), 3)
+      assert.equal(helpers.countIdenticalFaces([1, 1, 1, 1, 1]), 5)
+      assert.equal(helpers.countIdenticalFaces([1, 2, 3, 4, 5]), 1)
+    })
+
+    it('should should group results by values', function () {
+      assert.equal(
+        Object.keys(helpers.groupResultByValues([1, 3, 1, 1, 6])).length,
+        3,
+      )
+      assert.equal(
+        Object.keys(helpers.groupResultByValues([1, 1, 1, 1, 1])).length,
+        1,
+      )
+      assert.equal(
+        Object.keys(helpers.groupResultByValues([1, 2, 3, 4, 5])).length,
+        5,
+      )
+    })
+
+    it('should should count grouped values', function () {
+      assert.equal(helpers.groupResultByValues([1, 3, 1, 1, 6])[1], 3)
+      assert.equal(helpers.groupResultByValues([1, 6, 5, 2, 2])[2], 2)
+      assert.equal(helpers.groupResultByValues([1, 1, 1, 1, 1])[1], 5)
+      assert.equal(helpers.groupResultByValues([1, 1, 1, 1, 1])[5], undefined)
     })
   })
 

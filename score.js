@@ -1,3 +1,5 @@
+const helpers = require('./helpers')
+
 class Score {
   constructor() {
     this.options = {
@@ -90,6 +92,8 @@ class Score {
   }
 
   calculateScore(option, values) {
+    let identicalFaces = helpers.countIdenticalFaces(values)
+
     switch (option) {
       case 'aces':
         return this._calcul_classic_score(1, values)
@@ -103,6 +107,18 @@ class Score {
         return this._calcul_classic_score(5, values)
       case 'sixes':
         return this._calcul_classic_score(6, values)
+      case '4-same':
+        if (identicalFaces >= 4) {
+          return 40
+        }
+
+        return 0
+      case 'yahtzee':
+        if (identicalFaces == 5) {
+          return 50
+        }
+
+        return 0
       default:
         return 0
     }
