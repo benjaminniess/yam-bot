@@ -1,6 +1,5 @@
 const Promise = require('bluebird')
 const bot = require('./bots/bot-1')
-const helpers = require('./helpers')
 const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
@@ -60,7 +59,7 @@ async function startThrow() {
   try {
     throwResults = await throwManager.waitForThrow()
   } catch (e) {
-    console.error(e)
+    console.log(e)
     return startThrow()
   }
 
@@ -74,19 +73,17 @@ async function startThrow() {
       score.getAvailableOptions(),
     )
   } catch (e) {
-    console.error(e)
+    console.log(e)
     return startThrow()
   }
 
   try {
-    securityVerification = await throwManager.verifyWhatsNext(
+    securityVerification = throwManager.verifyWhatsNext(
       botDecision,
-      throwManager.getAllDices(),
-      throwManager.getCurrentThrowNumber(),
       score.getAvailableOptions(),
     )
   } catch (e) {
-    console.error(e)
+    console.log(e)
     return startThrow()
   }
 

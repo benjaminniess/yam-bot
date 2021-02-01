@@ -53,7 +53,25 @@ class ThrowManager {
     return this.result
   }
 
-  async verifyWhatsNext(result, values, throwNumber, availableOptions) {
+  verifyWhatsNext(botDecision, availableOptions) {
+    // Throw again
+    if (botDecision instanceof Array) {
+      if (this.getCurrentThrowNumber() >= 3) {
+        throw "Can't throw again"
+      } else {
+        return true
+      }
+    }
+
+    // Final decision
+    if (!botDecision instanceof String) {
+      throw 'Waiting for a string'
+    }
+
+    if (availableOptions.indexOf(botDecision) == -1) {
+      throw 'Option not available'
+    }
+
     return true
   }
 
