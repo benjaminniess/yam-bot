@@ -7,13 +7,21 @@ const chalk = require('chalk')
 
 console.log(chalk.blue('Yam bot at your service! \n'))
 
+const args = process.argv.slice(2)
+
+let runMode = 'manual'
+args.map((arg) => {
+  if (args == '--simulate') {
+    runMode = 'simulate'
+  }
+})
 startRound()
 
 function startRound() {
   if (history.getCurrentRound() >= 12) {
     console.log('GAME OVER')
     console.log('Your score is ' + score.getTotal())
-    return
+    process.exit(1)
   }
 
   throwManager.reset()
@@ -58,7 +66,11 @@ async function startThrow() {
 
   let throwResults, botDecision, securityVerification
   try {
-    throwResults = await throwManager.waitForThrow()
+    if (runMode == 'simulate') {
+      throwResults = throwManager.getRandomResults()
+    } else {
+      throwResults = await throwManager.waitForThrow()
+    }
   } catch (e) {
     console.log(e)
     return startThrow()
