@@ -1,6 +1,23 @@
 function countIdenticalFaces(result) {
   let groupedValues = groupResultByValues(result)
-  return groupedValues[Object.keys(groupedValues)[0]]
+  let maxOccurences = 0
+
+  for (const [diceValue, occurencesCount] of Object.entries(groupedValues)) {
+    if (occurencesCount > maxOccurences) {
+      maxOccurences = occurencesCount
+    }
+  }
+
+  return maxOccurences
+}
+
+function countOccurencesOf(value, result) {
+  let groupedResults = groupResultByValues(result)
+  if (groupedResults[value]) {
+    return groupedResults[value]
+  }
+
+  return 0
 }
 
 function groupResultByValues(result) {
@@ -11,4 +28,5 @@ function groupResultByValues(result) {
 }
 
 exports.countIdenticalFaces = countIdenticalFaces
+exports.countOccurencesOf = countOccurencesOf
 exports.groupResultByValues = groupResultByValues

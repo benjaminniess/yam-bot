@@ -107,6 +107,49 @@ class Score {
         return this._calcul_classic_score(5, values)
       case 'sixes':
         return this._calcul_classic_score(6, values)
+      case '3-same':
+        let maxOccurences = helpers.countIdenticalFaces(values)
+        if (maxOccurences < 3) {
+          return 0
+        }
+
+        let score = 0
+
+        values.map((diceValue) => {
+          score += diceValue
+        })
+
+        return score
+      case 'sm-straight':
+        return helpers.countOccurencesOf(1, values) == 1 &&
+          helpers.countOccurencesOf(2, values) == 1 &&
+          helpers.countOccurencesOf(3, values) == 1 &&
+          helpers.countOccurencesOf(4, values) == 1 &&
+          helpers.countOccurencesOf(5, values) == 1
+          ? 25
+          : 0
+      case 'lg-straight':
+        return helpers.countOccurencesOf(2, values) == 1 &&
+          helpers.countOccurencesOf(3, values) == 1 &&
+          helpers.countOccurencesOf(4, values) == 1 &&
+          helpers.countOccurencesOf(5, values) == 1 &&
+          helpers.countOccurencesOf(6, values) == 1
+          ? 25
+          : 0
+      case 'full':
+        let groupedValues = helpers.groupResultByValues(values)
+        if (Object.keys(groupedValues).length != 2) {
+          return 0
+        }
+
+        if (
+          groupedValues[Object.keys(groupedValues)[0]] != 3 &&
+          groupedValues[Object.keys(groupedValues)[0]] != 2
+        ) {
+          return 0
+        }
+
+        return 30
       case '4-same':
         if (identicalFaces >= 4) {
           return 40
@@ -125,14 +168,7 @@ class Score {
   }
 
   _calcul_classic_score(optionInteger, values) {
-    let score = 0
-    values.map((value) => {
-      if (value == optionInteger) {
-        score += optionInteger
-      }
-    })
-
-    return score
+    return helpers.countOccurencesOf(optionInteger, values) * optionInteger
   }
 
   getAvailableOptions() {
