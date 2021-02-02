@@ -151,6 +151,25 @@ describe('Score tests', function () {
       assert.equal(score.getTotal(), 15)
     })
   })
+
+  describe('Get total score with bonus', function () {
+    it('should retrive total score', function () {
+      score.setScore('aces', 5)
+      score.setScore('twos', 8)
+      score.setScore('threes', 6)
+      score.setScore('fours', 16)
+      score.setScore('fives', 15)
+      score.setScore('sixes', 12)
+      score.setScore('3-same', 0)
+      score.setScore('4-same', 0)
+      score.setScore('full', 0)
+      score.setScore('sm-straight', 0)
+      score.setScore('lg-straight', 0)
+      assert.equal(score.getTotal(), 62)
+      score.setScore('threes', 9)
+      assert.equal(score.getTotal(), 102)
+    })
+  })
 })
 
 describe('History tests', function () {

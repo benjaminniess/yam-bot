@@ -188,6 +188,17 @@ class Score {
       total += option.score
     }
 
+    if (
+      this.getScore('aces') +
+        this.getScore('twos') +
+        this.getScore('threes') +
+        this.getScore('fours') +
+        this.getScore('fives') +
+        this.getScore('sixes') >
+      63
+    ) {
+      total += 37
+    }
     return total
   }
 }
