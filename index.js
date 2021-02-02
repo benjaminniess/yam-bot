@@ -3,8 +3,9 @@ const bot = require('./bots/bot-1')
 const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
+const chalk = require('chalk')
 
-console.log('Yam bot at your service!')
+console.log(chalk.blue('Yam bot at your service! \n'))
 
 startRound()
 
@@ -96,7 +97,18 @@ function saveChoice(choice) {
 
   score.setScore(choice, roundScore)
 
-  console.log(history.getHistory())
+  console.log(
+    chalk.green(
+      'Choose ' +
+        score.getOption(choice).label +
+        ' and get ' +
+        roundScore +
+        ' points',
+    ),
+  )
+
+  console.log(chalk.blue('Your score so far:'))
+  console.log(score.getScoreTable(choice))
 
   return true
 }

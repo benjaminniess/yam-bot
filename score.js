@@ -1,4 +1,6 @@
 const helpers = require('./helpers')
+const Table = require('cli-table3')
+const chalk = require('chalk')
 
 class Score {
   constructor() {
@@ -200,6 +202,29 @@ class Score {
       total += 37
     }
     return total
+  }
+
+  getScoreTable(highlight = false) {
+    let table = new Table({
+      head: ['Options', 'Score'],
+      colWidths: [50, 50],
+    })
+
+    for (const [key, option] of Object.entries(this.options)) {
+      if (highlight == key) {
+        table.push([chalk.green(option.label), chalk.green(this.getScore(key))])
+      } else {
+        table.push([
+          option.label,
+          option.played ? this.getScore(key) : 'Not played yet',
+        ])
+      }
+    }
+
+    table.push(['BONUS (+37 if 63 or more with Aces to Sixes )', '0'])
+    table.push([chalk.green('TOTAL'), chalk.green(this.getTotal())])
+
+    return table.toString()
   }
 }
 module.exports = new Score()
