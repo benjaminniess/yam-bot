@@ -112,7 +112,8 @@ async function startThrow() {
   let throwResults, botDecision
   try {
     if (isSimulation()) {
-      throwResults = throwManager.getRandomResults()
+      throwResults = simulator.getRandomResults()
+      console.log('Dice result: ' + throwResults)
     } else {
       throwResults = await throwManager.waitForThrow()
     }

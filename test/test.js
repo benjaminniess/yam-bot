@@ -206,6 +206,12 @@ describe('Simulator tests', function () {
     })
   })
 
+  describe('Generating random results', function () {
+    it('Should generate 5 random numbers from 1 to 6', function () {
+      assert.equal(simulator.getRandomResults().length, 5)
+    })
+  })
+
   describe('Simulation results store', function () {
     it('Should log throw results', function () {
       simulator.saveScore(12)

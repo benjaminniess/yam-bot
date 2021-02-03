@@ -31,6 +31,21 @@ class Simulator {
     this.currentSimulationNumber++
   }
 
+  getRandomResults() {
+    let dicesResult = []
+    for (let i = 0; i < 5; i++) {
+      dicesResult.push(this._getRandomDiceValue())
+    }
+
+    return dicesResult
+  }
+
+  _getRandomDiceValue() {
+    let min = Math.ceil(1)
+    let max = Math.floor(6)
+    return Math.floor(Math.random() * (max - min)) + min
+  }
+
   getAllScores() {
     return this.finalScores
   }
