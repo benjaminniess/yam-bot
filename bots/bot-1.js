@@ -17,19 +17,23 @@ const priorityOrder = [
 ]
 
 class Bot1 extends YamResolver {
-  Whatsnext(diceValues, throwCount, availableOptions) {
-    return new Promise((resolve, reject) => {
-      if (
-        helpers.countIdenticalFaces(diceValues) == 5 &&
-        availableOptions.indexOf('yahtzee') !== -1
-      ) {
-        resolve('yahtzee')
-      }
+  async Whatsnext(diceValues, throwCount, availableOptions) {
+    if (
+      helpers.countIdenticalFaces(diceValues) == 5 &&
+      availableOptions.indexOf('yahtzee') !== -1
+    ) {
+      return 'yahtzee'
+    }
 
-      availableOptions.map((option) => {
-        resolve(option)
-      })
+    let firstOption
+
+    availableOptions.map((option) => {
+      if (firstOption == null) {
+        firstOption = option
+      }
     })
+
+    return firstOption
   }
 }
 module.exports = new Bot1()

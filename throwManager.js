@@ -53,7 +53,7 @@ class ThrowManager {
     return this.result
   }
 
-  verifyWhatsNext(botDecision, availableOptions) {
+  async verifyWhatsNext(botDecision, availableOptions) {
     // Throw again
     if (botDecision instanceof Array) {
       if (this.getCurrentThrowNumber() >= 3) {

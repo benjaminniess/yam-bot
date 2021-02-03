@@ -137,7 +137,7 @@ async function startThrow() {
   }
 
   try {
-    throwManager.verifyWhatsNext(botDecision, score.getAvailableOptions())
+    await throwManager.verifyWhatsNext(botDecision, score.getAvailableOptions())
   } catch (e) {
     console.log(e)
     return startThrow()

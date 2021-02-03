@@ -1,10 +1,14 @@
 class YamResolver {
-  Whatsnext(diceValues, throwCount, availableOptions) {
-    return new Promise((resolve, reject) => {
-      availableOptions.map((option) => {
-        resolve(option)
-      })
+  async Whatsnext(diceValues, throwCount, availableOptions) {
+    let firstOption
+
+    availableOptions.map((option) => {
+      if (firstOption == null) {
+        firstOption = option
+      }
     })
+
+    return firstOption
   }
 }
 module.exports = YamResolver
