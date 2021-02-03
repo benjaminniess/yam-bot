@@ -17,17 +17,21 @@ const priorityOrder = [
 ]
 
 class Bot1 extends YamResolver {
-  async Whatsnext(diceValues, throwCount, availableOptions) {
+  async decideWhatsnext() {
     if (
-      helpers.countIdenticalFaces(diceValues) == 5 &&
-      availableOptions.indexOf('yahtzee') !== -1
+      helpers.countIdenticalFaces(this.getDiceValues()) == 5 &&
+      this.getAvailableOptions().indexOf('yahtzee') !== -1
     ) {
       return 'yahtzee'
     }
 
+    return this.getBestOption()
+  }
+
+  getBestOption() {
     let firstOption
 
-    availableOptions.map((option) => {
+    this.getAvailableOptions().map((option) => {
       if (firstOption == null) {
         firstOption = option
       }
