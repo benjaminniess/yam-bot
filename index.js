@@ -4,24 +4,69 @@ const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
 const chalk = require('chalk')
-
-console.log(chalk.blue('Yam bot at your service! \n'))
+const simulator = require('./simulator')
 
 const args = process.argv.slice(2)
 
 let runMode = 'manual'
+
 args.map((arg) => {
+  console.log(arg)
   if (args == '--simulate') {
     runMode = 'simulate'
   }
 })
-startRound()
 
+if (isSimulation()) {
+  console.log(
+    chalk.blue(
+      'Starting simulation of ' + simulator.getTotalSimulations() + ' games \n',
+    ),
+  )
+} else {
+  console.log(chalk.blue('Yam bot at your service! \n'))
+}
+
+startRound()
 function startRound() {
   if (history.getCurrentRound() >= 12) {
-    console.log('GAME OVER')
-    console.log('Your score is ' + score.getTotal())
-    process.exit(1)
+    if (isSimulation()) {
+      simulator.saveScore(score.getTotal())
+
+      console.log(
+        chalk.green(
+          'END OF GAME : ' +
+            simulator.getCurrentGameNumber() +
+            ' with a score of ' +
+            score.getTotal() +
+            '\n\n',
+        ),
+      )
+      if (simulator.countRemainingSimulations() <= 0) {
+        console.log('GAME OVER')
+        console.log(
+          chalk.green('Yam bot best score is: ' + simulator.getBestScore()),
+        )
+        console.log(
+          chalk.red('Yam bot worst score is: ' + simulator.getWorstScore()),
+        )
+        console.log(
+          'Your bot average score is : ' + simulator.getAverageScore(),
+        )
+        console.log(simulator.getAllScores())
+        process.exit(1)
+      }
+
+      score.reset()
+      throwManager.reset()
+      history.reset()
+      startRound()
+      return
+    } else {
+      console.log('GAME OVER')
+      console.log('Your score is ' + score.getTotal())
+      process.exit(1)
+    }
   }
 
   throwManager.reset()
@@ -64,9 +109,9 @@ async function startThrow() {
       '/3',
   )
 
-  let throwResults, botDecision, securityVerification
+  let throwResults, botDecision
   try {
-    if (runMode == 'simulate') {
+    if (isSimulation()) {
       throwResults = throwManager.getRandomResults()
     } else {
       throwResults = await throwManager.waitForThrow()
@@ -91,10 +136,7 @@ async function startThrow() {
   }
 
   try {
-    securityVerification = throwManager.verifyWhatsNext(
-      botDecision,
-      score.getAvailableOptions(),
-    )
+    throwManager.verifyWhatsNext(botDecision, score.getAvailableOptions())
   } catch (e) {
     console.log(e)
     return startThrow()
@@ -119,8 +161,12 @@ function saveChoice(choice) {
     ),
   )
 
-  console.log(chalk.blue('Your score so far:'))
+  console.log(chalk.blue('Your score so far: ' + score.getTotal()))
   console.log(score.getScoreTable(choice))
 
   return true
+}
+
+function isSimulation() {
+  return runMode == 'simulate'
 }

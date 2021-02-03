@@ -3,6 +3,7 @@ const throwManager = require('../throwManager')
 const score = require('../score')
 const history = require('../history')
 const helpers = require('../helpers')
+const simulator = require('../simulator')
 
 describe('Throw manager tests', function () {
   describe('Get/Set', function () {
@@ -192,6 +193,38 @@ describe('History tests', function () {
       history.closeRound('full', 30)
       assert.equal(history.getHistory().length, 1)
       assert.equal(history.getHistory()[0].score, 30)
+    })
+  })
+})
+
+describe('Simulator tests', function () {
+  describe('Simulations count', function () {
+    it('Should get/set simulations count', function () {
+      assert.equal(simulator.getTotalSimulations(), 3)
+      simulator.setSimulationsCount(4)
+      assert.equal(simulator.getTotalSimulations(), 4)
+    })
+  })
+
+  describe('Simulation results store', function () {
+    it('Should log throw results', function () {
+      simulator.saveScore(12)
+      simulator.saveScore(10)
+      simulator.saveScore(50)
+      assert.equal(simulator.getCurrentGameNumber(), 3)
+
+      simulator.saveScore(50)
+      assert.throws(() => {
+        simulator.saveScore(50)
+      }, Error)
+    })
+  })
+
+  describe('Simulation results store', function () {
+    it('Should get best/worst/average scores', function () {
+      assert.equal(simulator.getBestScore(), 50)
+      assert.equal(simulator.getWorstScore(), 10)
+      assert.equal(simulator.getAverageScore(), 30.5)
     })
   })
 })

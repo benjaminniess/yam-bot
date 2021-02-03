@@ -2,8 +2,12 @@ const { throableDices } = require('./throwManager')
 
 class History {
   constructor() {
-    this.history = []
+    this.reset()
+  }
+
+  reset() {
     this.roundNumber = 0
+    this.history = []
   }
 
   newRound() {

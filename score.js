@@ -68,6 +68,13 @@ class Score {
     }
   }
 
+  reset() {
+    for (const [key, option] of Object.entries(this.options)) {
+      this.options[key].played = false
+      this.options[key].score = 0
+    }
+  }
+
   isPlayed(option) {
     return this.getOption(option).played
   }
