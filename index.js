@@ -43,17 +43,7 @@ function startRound() {
         ),
       )
       if (simulator.countRemainingSimulations() <= 0) {
-        console.log('GAME OVER')
-        console.log(
-          chalk.green('Yam bot best score is: ' + simulator.getBestScore()),
-        )
-        console.log(
-          chalk.red('Yam bot worst score is: ' + simulator.getWorstScore()),
-        )
-        console.log(
-          'Your bot average score is : ' + simulator.getAverageScore(),
-        )
-        console.log(simulator.getAllScores())
+        simulator.showEndScreen()
         process.exit(1)
       }
 
@@ -112,8 +102,12 @@ async function startThrow() {
   let throwResults, botDecision
   try {
     if (isSimulation()) {
-      throwResults = simulator.getRandomResults()
-      console.log('Dice result: ' + throwResults)
+      throwResults = throwManager
+        .getStashedDices()
+        .concat(
+          simulator.getRandomResults(5 - throwManager.getStashedDices().length),
+        )
+      console.log('Thrown result: ' + throwResults)
     } else {
       throwResults = await throwManager.waitForThrow()
     }
@@ -131,6 +125,8 @@ async function startThrow() {
       throwManager.getCurrentThrowNumber(),
       score.getAvailableOptions(),
     )
+
+    console.log('Bot decision: ' + botDecision + '"')
   } catch (e) {
     console.log(e)
     return startThrow()

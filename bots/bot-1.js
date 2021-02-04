@@ -25,19 +25,46 @@ class Bot1 extends YamResolver {
       return 'yahtzee'
     }
 
+    if (this.getThrowCount() < 3) {
+      let identicalFaces = helpers.countIdenticalFaces(this.getDiceValues())
+
+      if (identicalFaces > 1) {
+        let groupedValues = helpers.groupResultByValues(this.getDiceValues())
+        let maxOccurences = 0
+        let toStash = []
+        for (const [diceValue, occurencesCount] of Object.entries(
+          groupedValues,
+        )) {
+          if (occurencesCount > maxOccurences) {
+            maxOccurences = occurencesCount
+            toStash = []
+            for (let i = 0; i < maxOccurences; i++) {
+              toStash.push(diceValue)
+            }
+          }
+        }
+
+        return toStash
+      }
+    }
+
     return this.getBestOption()
   }
 
   getBestOption() {
-    let firstOption
+    let bestOption
+    let bestScore = null
 
+    let currentScore = null
     this.getAvailableOptions().map((option) => {
-      if (firstOption == null) {
-        firstOption = option
+      currentScore = helpers.calculateScore(option, this.getDiceValues())
+      if (currentScore > bestScore || bestScore === null) {
+        bestScore = currentScore
+        bestOption = option
       }
     })
 
-    return firstOption
+    return bestOption
   }
 }
 module.exports = new Bot1()

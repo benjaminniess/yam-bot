@@ -33,11 +33,13 @@ class ThrowManager {
   }
 
   saveThrowResults(result) {
-    this.result = result.concat(this.stashedDices)
+    this.result = result
   }
 
   saveStashedDices(dices) {
     this.setThroableDices(5 - dices.length)
+
+    // TODO: check dice values
     this.stashedDices = dices
   }
 

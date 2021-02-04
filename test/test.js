@@ -200,6 +200,7 @@ describe('History tests', function () {
 describe('Simulator tests', function () {
   describe('Simulations count', function () {
     it('Should get/set simulations count', function () {
+      simulator.setSimulationsCount(3)
       assert.equal(simulator.getTotalSimulations(), 3)
       simulator.setSimulationsCount(4)
       assert.equal(simulator.getTotalSimulations(), 4)
@@ -209,6 +210,7 @@ describe('Simulator tests', function () {
   describe('Generating random results', function () {
     it('Should generate 5 random numbers from 1 to 6', function () {
       assert.equal(simulator.getRandomResults().length, 5)
+      assert.equal(simulator.getRandomResults(3).length, 3)
     })
   })
 
