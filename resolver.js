@@ -30,5 +30,9 @@ class YamResolver {
   getAvailableOptions() {
     return this.availableOptions
   }
+
+  getCurrentRoundNumber() {
+    return 13 - this.getAvailableOptions().length
+  }
 }
 module.exports = YamResolver
