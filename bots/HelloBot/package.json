@@ -1,0 +1,14 @@
+{
+  "name": "hellobot",
+  "version": "1.0.0",
+  "description": "The most simple Yam bot ever that just chose the first option it finds",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^8.2.1"
+  }
+}

@@ -1,7 +1,7 @@
-const YamResolver = require('../resolver')
-const helpers = require('../helpers')
+const YamResolver = require('../../resolver')
+const helpers = require('../../helpers')
 
-class Bot1 extends YamResolver {
+class deepGreen extends YamResolver {
   constructor() {
     super()
     this.combinations = {
@@ -368,4 +368,4 @@ class Bot1 extends YamResolver {
     return bestOption
   }
 }
-module.exports = new Bot1()
+module.exports = new deepGreen()

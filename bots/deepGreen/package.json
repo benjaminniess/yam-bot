@@ -1,0 +1,14 @@
+{
+  "name": "deepgreen",
+  "version": "1.0.0",
+  "description": "A simple Yam bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "author": "Benjamin Niess",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^8.2.1"
+  }
+}

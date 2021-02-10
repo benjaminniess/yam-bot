@@ -1,5 +1,5 @@
 const Promise = require('bluebird')
-const bot = require('./bots/bot-1')
+const bot = require('./bots/deepGreen')
 const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
@@ -126,7 +126,7 @@ async function startThrow() {
       score.getAvailableOptions(),
     )
 
-    console.log('Bot decision: ' + botDecision + '"')
+    console.log('Bot decision: "' + botDecision + '"')
   } catch (e) {
     console.log(e)
     return startThrow()
