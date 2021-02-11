@@ -1,21 +1,27 @@
 const Promise = require('bluebird')
-const bot = require('./bots/deepGreen')
+
 const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
 const chalk = require('chalk')
 const simulator = require('./simulator')
 
-const args = process.argv.slice(2)
+const yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+const deepGreen = require('./bots/deepGreen')
+const argv = yargs(hideBin(process.argv)).argv
 
 let runMode = 'manual'
+if (argv.simulate) {
+  runMode = 'simulate'
+}
 
-args.map((arg) => {
-  console.log(arg)
-  if (args == '--simulate') {
-    runMode = 'simulate'
-  }
-})
+if (argv.rounds && argv.rounds > 0) {
+  simulator.setSimulationsCount(argv.rounds)
+}
+
+const botDir = argv.bot ? argv.bot : './bots/deepGreen'
+const bot = require(botDir)
 
 if (isSimulation()) {
   console.log(
