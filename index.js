@@ -138,22 +138,6 @@ async function startThrow() {
       throwManager.getCurrentThrowNumber(),
       score.getAvailableOptions(),
     )
-
-    if (botDecision instanceof Array) {
-      console.log(
-        'The bot thinks the best solution with the result ' +
-          chalk.blue(throwManager.getAllDices()) +
-          ' is to save the dices ' +
-          botDecision,
-      )
-    } else {
-      console.log(
-        chalk.blue(
-          'The bot thinks the best solution is to choose the save the ' +
-            botDecision,
-        ),
-      )
-    }
   } catch (e) {
     console.log(e)
     return startThrow()
@@ -162,8 +146,24 @@ async function startThrow() {
   try {
     await throwManager.verifyWhatsNext(botDecision, score.getAvailableOptions())
   } catch (e) {
-    console.log(e)
-    return startThrow()
+    console.log(chalk.red(e))
+    process.exit(1)
+  }
+
+  if (botDecision instanceof Array) {
+    console.log(
+      'The bot thinks the best solution with the result ' +
+        chalk.blue(throwManager.getAllDices()) +
+        ' is to save the dices ' +
+        botDecision,
+    )
+  } else {
+    console.log(
+      chalk.blue(
+        'The bot thinks the best solution is to choose the save the ' +
+          botDecision,
+      ),
+    )
   }
 
   return botDecision

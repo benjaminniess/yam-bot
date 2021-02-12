@@ -40,7 +40,6 @@ class ThrowManager {
   saveStashedDices(dices) {
     this.setThroableDices(5 - dices.length)
 
-    // TODO: check dice values
     this.stashedDices = dices
   }
 
@@ -59,6 +58,20 @@ class ThrowManager {
   async verifyWhatsNext(botDecision, availableOptions) {
     // Throw again
     if (botDecision instanceof Array) {
+      let allDices = this.getAllDices()
+      let arrayKey
+      botDecision.map((number) => {
+        arrayKey = this._arraySearch(allDices, number)
+        if (arrayKey === false) {
+          console.log(
+            chalk.red(botDecision + ' does not fit with ' + this.getAllDices()),
+          )
+          throw 'Your bot is cheating. Go the hell!'
+        } else {
+          allDices.splice(arrayKey, 1)
+        }
+      })
+
       if (this.getCurrentThrowNumber() >= 3) {
         throw "Can't throw again"
       } else {
@@ -113,6 +126,15 @@ class ThrowManager {
     }
 
     return numbers.map((x) => +x)
+  }
+
+  _arraySearch(arr, val) {
+    for (let i = 0; i < arr.length; i++) {
+      if (parseInt(arr[i]) === parseInt(val)) {
+        return i
+      }
+    }
+    return false
   }
 }
 module.exports = new ThrowManager()
