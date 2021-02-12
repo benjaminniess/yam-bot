@@ -19,9 +19,9 @@ The bot will tell you what to do next
 
 ### Build your own YAM BOT
 
-If you want to build your own YAM BOT you just need to copy the `bots/HelloBot` dir whereever you want, and tweak the `decideWhatsnext` function.
+If you want to build your own YAM BOT you just need to copy the `bots/HelloBot` dir wherever you want, and tweak the `decideWhatsnext` function. This function needs to return either an array with the dices you want to save for the next throws (ex. `[ 3, 3 ]` or the key of the option you want to save (ex. `lg-straight`) )
 
-You'll always have access to :
+In your extented class, yYou'll always have access to :
 
 `this.getAvailableOptions()` : The options you haven't used yet
 
