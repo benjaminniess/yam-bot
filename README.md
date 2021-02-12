@@ -2,11 +2,11 @@
 
 ### Installation
 
-Simply run `npm install`
+`npm install`
 
 ### How to use?
 
-#### Play a real game?
+#### Play for real?
 
 `node index.js`
 
@@ -24,9 +24,12 @@ If you want to build your own YAM BOT you just need to copy the `bots/HelloBot` 
 You'll always have access to :
 
 `this.getAvailableOptions()` : The options you haven't used yet
-`this.getDiceValues()` : The dice values in an array such as [ 1, 5, 2, 1, 6]
-`this.getThrowCount()`: The number of throws for the current round (1, 2 or 3)
-`this.getCurrentRoundNumber()` : The current round (1 to 12)
+
+`this.getDiceValues()` : The dice values in an array such as `[ 1, 5, 2, 1, 6]`
+
+`this.getThrowCount()`: The number of throws for the current round (`1`, `2` or `3`)
+
+`this.getCurrentRoundNumber()` : The current round (`1` to `12`)
 
 You'll aslo have acces to a bunch of helpers in the `helpers.js` file functions such as `countIdenticalFaces()`, `countOccurencesOf()`, `calculateScore` etc.
 
