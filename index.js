@@ -97,13 +97,19 @@ function startRound() {
 }
 
 async function startThrow() {
-  console.log(
+  let message =
     'Round ' +
-      history.getCurrentRound() +
-      ' - throw ' +
-      throwManager.getCurrentThrowNumber() +
-      '/3',
-  )
+    history.getCurrentRound() +
+    ' - throw ' +
+    throwManager.getCurrentThrowNumber() +
+    '/3'
+
+  if (throwManager.getStashedDices().length > 0) {
+    message += ' - Saved dices: ' + chalk.blue(throwManager.getStashedDices())
+  } else {
+    message += ' - ' + chalk.blue('No saved dices yet')
+  }
+  console.log(message)
 
   let throwResults, botDecision
   try {
@@ -113,9 +119,10 @@ async function startThrow() {
         .concat(
           simulator.getRandomResults(5 - throwManager.getStashedDices().length),
         )
-      console.log('Thrown result: ' + throwResults)
+      console.log('Throw result: ' + throwResults)
     } else {
       throwResults = await throwManager.waitForThrow()
+      throwResults = throwResults.concat(throwManager.getStashedDices())
     }
   } catch (e) {
     console.log(e)
@@ -132,7 +139,21 @@ async function startThrow() {
       score.getAvailableOptions(),
     )
 
-    console.log('Bot decision: "' + botDecision + '"')
+    if (botDecision instanceof Array) {
+      console.log(
+        'The bot thinks the best solution with the result ' +
+          chalk.blue(throwManager.getAllDices()) +
+          ' is to save the dices ' +
+          botDecision,
+      )
+    } else {
+      console.log(
+        chalk.blue(
+          'The bot thinks the best solution is to choose the save the ' +
+            botDecision,
+        ),
+      )
+    }
   } catch (e) {
     console.log(e)
     return startThrow()

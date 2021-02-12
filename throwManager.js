@@ -1,4 +1,5 @@
 const readline = require('readline')
+const chalk = require('chalk')
 
 class ThrowManager {
   constructor() {
@@ -80,9 +81,9 @@ class ThrowManager {
   waitForThrow() {
     return new Promise((resolve, reject) => {
       this.rl.question(
-        'Please enter ' +
-          this.countThroableDices() +
-          ' space separated numbers ',
+        'Please throw ' +
+          chalk.blue(this.countThroableDices()) +
+          ' dices and enter the values separated with spaces (ex: 1 4 5 1 1) ',
         (answer) => {
           try {
             resolve(this.formatDicesValues(answer))
