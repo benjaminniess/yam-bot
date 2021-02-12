@@ -1,3 +1,9 @@
+/**
+ * Get the max number of identical faces in a 5 dices results (ex. [1,3,3,1,1] will return 3)
+ *
+ * @param {array} result: An array of dices values
+ * @return {number} the maximum identical occurences
+ */
 function countIdenticalFaces(result) {
   let groupedValues = groupResultByValues(result)
   if (!groupedValues) {
@@ -15,6 +21,13 @@ function countIdenticalFaces(result) {
   return maxOccurences
 }
 
+/**
+ * Get the number of occurences of a dice number for a given throw result
+ *
+ * @param {number} value: a dice value from 1 to 6
+ * @param {array} result: An array of dices values
+ * @return {number} the number of occurences of the value in the givent result array
+ */
 function countOccurencesOf(value, result) {
   let groupedResults = groupResultByValues(result)
   if (groupedResults[value]) {
@@ -24,6 +37,12 @@ function countOccurencesOf(value, result) {
   return 0
 }
 
+/**
+ * Convert an array of result into an object with dice number as properties and occurences as values
+ *
+ * @param {array} result: An array of dices values
+ * @return {object} the result converted object
+ */
 function groupResultByValues(result) {
   if (undefined == result) {
     return
@@ -35,53 +54,59 @@ function groupResultByValues(result) {
   )
 }
 
-function calculateScore(option, values) {
-  let identicalFaces = countIdenticalFaces(values)
+/**
+ *
+ * @param {string} option: the key of an option ("4-same", "full" etc.)
+ * @param {array} result: An array of dices values
+ * @return {nuber} The potential score for the given option/result
+ */
+function calculateScore(option, result) {
+  let identicalFaces = countIdenticalFaces(result)
 
   switch (option) {
     case 'aces':
-      return _calcul_classic_score(1, values)
+      return _calcul_classic_score(1, result)
     case 'twos':
-      return _calcul_classic_score(2, values)
+      return _calcul_classic_score(2, result)
     case 'threes':
-      return _calcul_classic_score(3, values)
+      return _calcul_classic_score(3, result)
     case 'fours':
-      return _calcul_classic_score(4, values)
+      return _calcul_classic_score(4, result)
     case 'fives':
-      return _calcul_classic_score(5, values)
+      return _calcul_classic_score(5, result)
     case 'sixes':
-      return _calcul_classic_score(6, values)
+      return _calcul_classic_score(6, result)
     case '3-same':
-      let maxOccurences = countIdenticalFaces(values)
+      let maxOccurences = countIdenticalFaces(result)
       if (maxOccurences < 3) {
         return 0
       }
 
       let score = 0
 
-      values.map((diceValue) => {
+      result.map((diceValue) => {
         score += parseInt(diceValue)
       })
 
       return score
     case 'sm-straight':
-      return countOccurencesOf(1, values) == 1 &&
-        countOccurencesOf(2, values) == 1 &&
-        countOccurencesOf(3, values) == 1 &&
-        countOccurencesOf(4, values) == 1 &&
-        countOccurencesOf(5, values) == 1
+      return countOccurencesOf(1, result) == 1 &&
+        countOccurencesOf(2, result) == 1 &&
+        countOccurencesOf(3, result) == 1 &&
+        countOccurencesOf(4, result) == 1 &&
+        countOccurencesOf(5, result) == 1
         ? 25
         : 0
     case 'lg-straight':
-      return countOccurencesOf(2, values) == 1 &&
-        countOccurencesOf(3, values) == 1 &&
-        countOccurencesOf(4, values) == 1 &&
-        countOccurencesOf(5, values) == 1 &&
-        countOccurencesOf(6, values) == 1
+      return countOccurencesOf(2, result) == 1 &&
+        countOccurencesOf(3, result) == 1 &&
+        countOccurencesOf(4, result) == 1 &&
+        countOccurencesOf(5, result) == 1 &&
+        countOccurencesOf(6, result) == 1
         ? 25
         : 0
     case 'full':
-      let groupedValues = groupResultByValues(values)
+      let groupedValues = groupResultByValues(result)
       if (Object.keys(groupedValues).length != 2) {
         return 0
       }
