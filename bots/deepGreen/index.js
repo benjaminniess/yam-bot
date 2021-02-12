@@ -123,12 +123,16 @@ class deepGreen extends YamResolver {
   }
 
   async decideWhatsnext() {
+    if (this.getCurrentRoundNumber() == 1 && this.getThrowCount() == 1) {
+      this.reset()
+    }
     if (this.getThrowCount() < 3) {
       let availableOptions = this.getAvailableOptions()
+      console.log(availableOptions)
       let identicalFaces = helpers.countIdenticalFaces(this.getDiceValues())
       let groupedResults = helpers.groupResultByValues(this.getDiceValues())
 
-      let combinations = this.combinations
+      let combinations = JSON.parse(JSON.stringify(this.combinations))
 
       let bestWeight
       let bestOption
@@ -298,6 +302,7 @@ class deepGreen extends YamResolver {
     }
   }
 
+  reset() {}
   getProbability(missingDicesCount) {
     if (missingDicesCount <= 0) {
       return 1
