@@ -179,7 +179,7 @@ class deepGreen extends YamResolver {
               break
             case 'sm-straight':
               missingCount = 0
-              for (let i = 1; i <= 6; i++) {
+              for (let i = 1; i <= 5; i++) {
                 if (helpers.countOccurencesOf(i, this.getDiceValues()) < 1) {
                   missingCount++
                 }
@@ -194,7 +194,7 @@ class deepGreen extends YamResolver {
               break
             case 'lg-straight':
               missingCount = 0
-              for (let i = 2; i <= 7; i++) {
+              for (let i = 2; i <= 6; i++) {
                 if (helpers.countOccurencesOf(i, this.getDiceValues()) < 1) {
                   missingCount++
                 }
