@@ -58,7 +58,7 @@ class ThrowManager {
   async verifyWhatsNext(botDecision, availableOptions) {
     // Throw again
     if (botDecision instanceof Array) {
-      let allDices = this.getAllDices()
+      let allDices = JSON.parse(JSON.stringify(this.getAllDices()))
       let arrayKey
       botDecision.map((number) => {
         arrayKey = this._arraySearch(allDices, number)
@@ -77,18 +77,18 @@ class ThrowManager {
       } else {
         return true
       }
-    }
+    } else {
+      // Final decision
+      if (!botDecision instanceof String) {
+        throw 'Waiting for a string'
+      }
 
-    // Final decision
-    if (!botDecision instanceof String) {
-      throw 'Waiting for a string'
-    }
+      if (availableOptions.indexOf(botDecision) == -1) {
+        throw 'Option not available'
+      }
 
-    if (availableOptions.indexOf(botDecision) == -1) {
-      throw 'Option not available'
+      return true
     }
-
-    return true
   }
 
   waitForThrow() {
