@@ -128,7 +128,6 @@ class deepGreen extends YamResolver {
     }
     if (this.getThrowCount() < 3) {
       let availableOptions = this.getAvailableOptions()
-      console.log(availableOptions)
       let identicalFaces = helpers.countIdenticalFaces(this.getDiceValues())
       let groupedResults = helpers.groupResultByValues(this.getDiceValues())
 
