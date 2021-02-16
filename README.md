@@ -15,7 +15,7 @@ The bot will tell you what to do next
 
 #### Simulate as many games as you like?
 
-`node index.js --rounds=10`
+`node index.js --simulate --rounds=10`
 
 ### Build your own YAM BOT
 
