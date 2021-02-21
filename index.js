@@ -8,7 +8,6 @@ const simulator = require('./simulator')
 
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
-const deepGreen = require('./bots/deepGreen')
 const argv = yargs(hideBin(process.argv)).argv
 
 let runMode = 'manual'

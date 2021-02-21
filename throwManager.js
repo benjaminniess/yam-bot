@@ -1,13 +1,9 @@
-const readline = require('readline')
+const inquirer = require('inquirer');
 const chalk = require('chalk')
 
 class ThrowManager {
   constructor() {
     this.reset()
-    this.rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
   }
 
   reset() {
@@ -93,18 +89,23 @@ class ThrowManager {
 
   waitForThrow() {
     return new Promise((resolve, reject) => {
-      this.rl.question(
-        'Please throw ' +
+      inquirer
+      .prompt([
+        {
+          type: 'input',
+          name: 'dices',
+          message: 'Please throw ' +
           chalk.blue(this.countThroableDices()) +
           ' dices and enter the values separated with spaces (ex: 1 4 5 1 1) ',
-        (answer) => {
-          try {
-            resolve(this.formatDicesValues(answer))
-          } catch (error) {
-            reject('Wrong format. Please try again')
-          }
         },
-      )
+      ])
+      .then(answers => {
+        try {
+          resolve(this.formatDicesValues(answers.dices))
+        } catch (error) {
+          reject('Wrong format. Please try again')
+        }
+      })
     })
   }
 
