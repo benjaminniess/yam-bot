@@ -84,4 +84,4 @@ class Simulator {
     console.log(this.getAllScores())
   }
 }
-module.exports = new Simulator()
+module.exports = Simulator

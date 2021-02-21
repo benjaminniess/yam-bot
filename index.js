@@ -4,7 +4,7 @@ const history = require('./history')
 const score = require('./score')
 const throwManager = require('./throwManager')
 const chalk = require('chalk')
-const simulator = require('./simulator')
+const simulator = new(require('./simulator'))
 
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')

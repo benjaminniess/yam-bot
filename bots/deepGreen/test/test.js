@@ -3,7 +3,7 @@ const throwManager = require('../../../throwManager')
 const score = require('../../../score')
 const history = require('../../../history')
 const helpers = require('../../../helpers')
-const simulator = require('../../../simulator')
+const simulator = new(require('../../../simulator'))
 const bot = require('../index')
 
 describe('Bots test', function () {
